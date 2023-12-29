@@ -66,12 +66,12 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
-//	@Override
-//	public List<User> searchUser(String query) {
-//		// TODO Auto-generated method stub
-//		List<User> users = userRepo.searchUser(query);
-//		return users;
-//	}
+	@Override
+	public List<User> searchUser(String query) {
+		// TODO Auto-generated method stub
+		List<User> users = userRepo.findBydisplayName(query);
+		return users;
+	}
 
 //	@Override
 //	public User createUser(User user) {

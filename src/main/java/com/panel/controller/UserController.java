@@ -1,9 +1,12 @@
 package com.panel.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -23,24 +26,19 @@ public class UserController {
 	@Autowired
 	private UserServiceImpl userService;
 
-	@GetMapping("/home")
-	public String home() {
-		System.out.println("user home");
-		return "user home";
-	}
 	@GetMapping("/profile")
 	public ResponseEntity<User> getUserProfileHandler(@RequestHeader("Authorization") String token) throws UserException {
 		System.out.println("user profile");
 		System.out.println("token : " + token);
 		User findUserProfile = userService.findUserProfile(token);
-		return new ResponseEntity<>(findUserProfile, HttpStatus.ACCEPTED);
+		return new ResponseEntity<User>(findUserProfile, HttpStatus.ACCEPTED);
 	}
 	
-//	@GetMapping("/{query}")
-//	public ResponseEntity<List<User>> searchUserhandler(@PathVariable("query") String q ){
-//		List<User> searchUser = userService.searchUser(q);
-//		return new ResponseEntity<List<User>>(searchUser , HttpStatus.OK);
-//	}
+	@GetMapping("/search/{query}")
+	public ResponseEntity<List<User>> searchUserhandler(@PathVariable("query") String q ){
+		List<User> searchUser = userService.searchUser(q);
+		return new ResponseEntity<List<User>>(searchUser , HttpStatus.OK);
+	}
 	
 	@PutMapping("/update")
 	public ResponseEntity<ApiResponse> updatedUser(@RequestBody UserRequest req, @RequestHeader("Authorization") String token) throws UserException{
@@ -50,7 +48,5 @@ public class UserController {
 		ApiResponse apiRes = new ApiResponse("user updates successFully", true);
 		return new ResponseEntity<ApiResponse>(apiRes, HttpStatus.ACCEPTED);
 	}
-	
-	
 	
 }
