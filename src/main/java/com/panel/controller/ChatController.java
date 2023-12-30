@@ -29,12 +29,6 @@ public class ChatController {
 	@Autowired
 	private UserServiceImpl userService;
 
-	
-	@GetMapping("/home")
-	public String home() {
-		return "chats home";
-	}
-
 	@PostMapping("/single")
 	public ResponseEntity<MyChat> createChatHandler(@RequestBody SingleChatRequest singleChatRequest,
 			@RequestHeader("Authorization") String jwt) {
@@ -89,7 +83,7 @@ public class ChatController {
 		}
 	}
 
-	@PostMapping("/user")
+	@GetMapping("/user")
 	public ResponseEntity<List<MyChat>> findAllChatByUserIdHandler(@RequestHeader("Authorization") String jwt) {
 		try {
 			User user = userService.findUserProfile(jwt);

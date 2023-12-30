@@ -67,40 +67,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> searchUser(String query) {
-		// TODO Auto-generated method stub
-		List<User> users = userRepo.findBydisplayName(query);
-		return users;
+    public List<User> searchUsers(String keyword) {
+        return userRepo.findByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCase(keyword, keyword);
+    }
+	
+	@Override
+	public List<User> getAllUser( ) {
+		List<User> findAll = this.userRepo.findAll();
+		return findAll;
 	}
-
-//	@Override
-//	public User createUser(User user) {
-//		User save = this.userRepo.save(user);
-//		return save;
-//	}
-//	
-//	@Override
-//	public User getUserById(int id) {
-//	    return userRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("no record found from this id"));
-//	}
-//	
-//	@Override
-//	public List<User> getAllUser(User user ) {
-//		List<User> findAll = this.userRepo.findAll();
-//		return findAll;
-//	}
-//	@Override
-//	public User updateUser(int id, User user) {
-//		if (this.userRepo.existsById(id)) {
-//			user.setId(id);
-//			return this.userRepo.save(user);
-//		}
-//		return null;
-//	}
-//
-//	@Override
-//	public void deleteUser(int id) {
-//		this.userRepo.deleteById(id);
-//	}
-//	
+	
 }
