@@ -154,7 +154,7 @@ public class ChatController {
 	public MyChat findById(@PathVariable Integer catId) {
 		return chatService.findById(catId);
 	}
-
+ 
 	@GetMapping("/chatFindByUserId/{userId}")
 	public List<MyChat> chatFindByUserId(@PathVariable Integer userId) {
 		return chatService.chatFindByUserId(userId);

@@ -39,7 +39,7 @@ public class AuthController {
 	private CustomUserService customuser;
 
 	@PostMapping("/signup")
-	public ResponseEntity<AuthResponse> userSignup(@RequestBody User user) throws UserException {
+	public ResponseEntity<User> userSignup(@RequestBody User user) throws UserException {
 //		System.out.println("call function");
 		String email = user.getEmail();
 		String displayName = user.getDisplayName();
@@ -55,16 +55,16 @@ public class AuthController {
 		createUser.setEmail(email);
 		createUser.setPassword(passwordEncoder.encode(password));
 		createUser.setUsername(username);
-		userRepo.save(createUser);
+		User save = userRepo.save(createUser);
 																																																	
-		Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+//		Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+//
+//		SecurityContextHolder.getContext().setAuthentication(authentication);
+//		
+//		String generatedToken = jwtToken.generateToken(authentication);
+//		AuthResponse authRes = new AuthResponse(generatedToken, true);
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		
-		String generatedToken = jwtToken.generateToken(authentication);
-		AuthResponse authRes = new AuthResponse(generatedToken, true);
-
-		return new ResponseEntity<>(authRes, HttpStatus.CREATED);
+		return new ResponseEntity<User>(save, HttpStatus.CREATED);
 
 	}
 

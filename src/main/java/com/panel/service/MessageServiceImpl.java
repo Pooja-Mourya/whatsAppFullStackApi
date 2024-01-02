@@ -5,6 +5,7 @@ import com.panel.entity.MyChat;
 import com.panel.entity.User;
 import com.panel.exceptionHandler.MessageException;
 import com.panel.exceptionHandler.UserException;
+import com.panel.payload.ChatMessagesResponse;
 import com.panel.repository.MessageRepository;
 import com.panel.request.SendMessageRequest;
 
@@ -27,17 +28,23 @@ public class MessageServiceImpl implements MessageService {
     @Autowired 
     private ChatService chatService;
 
-    // ... other methods ...
-
     @Override
-    public List<Message> getAllMessages(Integer chatId, User reqUser) throws UserException {
+    public ChatMessagesResponse getAllMessages(Integer chatId, User reqUser) throws UserException {
         MyChat chat = chatService.findById(chatId);
         System.out.println(chat.getId() + ": chat id");
         if (!chat.getUsers().contains(reqUser)) {
             throw new UserException("You are not related to this chat");
         }
-        return messageRepo.findByChatId(chatId);
+
+        List<Message> messages = messageRepo.findByChatId(chatId);
+        ChatMessagesResponse response = new ChatMessagesResponse();
+        response.setMessages(messages);
+        response.setChatId(String.valueOf(chat.getId()));  // or Integer.toString(chat.getId())
+
+        return response;
     }
+
+
 
     @Override
     public Message findMessageById(Integer messageId) throws MessageException {

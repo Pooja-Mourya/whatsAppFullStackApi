@@ -20,8 +20,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepository userRepo;
 
-//	@Autowired
-//	private TokenProvider tokenProvider;
 
 	TokenProvider tokenProvider = new TokenProvider();
 
@@ -53,6 +51,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findUserProfile(String jwt) throws UserException {
 		// TODO Auto-generated method stub
+		
+		System.out.println("user jwt : " + jwt);
 		String email = tokenProvider.getEmailFromToken(jwt);
 		System.out.println("email : " + email);
 		if (email == null) {

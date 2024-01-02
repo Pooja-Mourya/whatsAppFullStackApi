@@ -30,8 +30,8 @@ public class UserController {
 	@GetMapping("/profile")
 	public ResponseEntity<User> getUserProfileHandler(@RequestHeader("Authorization") String token)
 			throws UserException {
-		System.out.println("user profile");
-		System.out.println("token : " + token);
+//		System.out.println("user profile");
+//		System.out.println("token : " + token);
 		User findUserProfile = userService.findUserProfile(token);
 		return new ResponseEntity<User>(findUserProfile, HttpStatus.ACCEPTED);
 	}
