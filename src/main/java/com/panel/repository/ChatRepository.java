@@ -12,15 +12,8 @@ import com.panel.entity.User;
 
 public interface ChatRepository extends JpaRepository<MyChat, Integer>{
 
-	@Query("select c from MyChat c join c.users u where u.id=:userId ")
-	List<MyChat> findByUserId(@Param("userId")Integer userId);
+	List<MyChat> findByUsers_Id(Integer userId);
 
-//	@Query("select c from MyChat c where c.isgroup = false And :user Member of c.users And :reqUser Member of c.users ")
-//	public MyChat findSingleChatByUserIds(@Param("user") User user, @Param("reqUser") User reqUser);
-	
-	@Query("SELECT c FROM MyChat c WHERE c.isgroup = false AND :user MEMBER OF c.users AND :reqUser MEMBER OF c.users")
-	public MyChat findSingleChatByUserIds(@Param("user") User user, @Param("reqUser") User reqUser);
-
-	
+	MyChat findFirstByIsgroupFalseAndUsersContainsAndUsersContains(User user, User reqUser);
 
 }

@@ -17,4 +17,6 @@ public interface UserService {
     
 //    public List<User> searchUser(String query);
     public List<User> searchUsers(String keyword);
+    
+    public void deleteUser(int id);
 }

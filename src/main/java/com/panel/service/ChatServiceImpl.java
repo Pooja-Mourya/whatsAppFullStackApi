@@ -30,7 +30,7 @@ public class ChatServiceImpl implements ChatService {
 	public MyChat userChat(User requser, Integer userId2) {
 		User user = userRepo.findUserById(userId2);
 		System.out.println("api chat user : ** " + user);
-		MyChat chatIsExisting = chatRepo.findSingleChatByUserIds(user, requser);
+		MyChat chatIsExisting = chatRepo.findFirstByIsgroupFalseAndUsersContainsAndUsersContains(user, requser);
 		if (chatIsExisting != null) {
 			return chatIsExisting;
 		}
@@ -50,7 +50,7 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public List<MyChat> chatFindByUserId(Integer userId) {
-		return chatRepo.findByUserId(userId);
+		return chatRepo.findByUsers_Id(userId);
 	}
 
 	@Override
