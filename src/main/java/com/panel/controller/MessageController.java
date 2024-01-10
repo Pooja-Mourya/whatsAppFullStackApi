@@ -3,6 +3,7 @@ package com.panel.controller;
 import com.panel.entity.Message;
 import com.panel.entity.User;
 import com.panel.payload.ApiResponse;
+import com.panel.payload.ProcessedMessage;
 import com.panel.request.SendMessageRequest;
 import com.panel.service.MessageService;
 import com.panel.service.UserServiceImpl;
@@ -39,30 +40,19 @@ public class MessageController {
 	}
 	
 	@GetMapping("/chat/{chatId}")
-	public ResponseEntity<List<Message>> findMesssageByIdHandler(@PathVariable Integer chatId,
+	public List<ProcessedMessage> findMesssageByIdHandler(@PathVariable Integer chatId,
 			@RequestHeader("Authorization") String jwt) {
 		try {
 			User user = userService.findUserProfile(jwt);
-			messageService.getAllMessages(chatId, user);
-			return new ResponseEntity<List<Message>>( HttpStatus.CREATED);
+		return	messageService.getAllMessages(chatId, user);
+//			return new ResponseEntity<List<Message>>( HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return null;
+	//		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@GetMapping("/chat")
-	public ResponseEntity<List<Message>> sendMessageHandler(@PathVariable Integer chatId,
-			@RequestHeader("Authorization") String jwt) {
-		try {
-			User user = userService.findUserProfile(jwt);
-			messageService.getAllMessages(chatId, user);
-			return new ResponseEntity<List<Message>>( HttpStatus.CREATED);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
 	
 	@DeleteMapping("/{chatId}")
 	public ResponseEntity<ApiResponse> deleteMessageHandler(@PathVariable Integer chatId,
@@ -74,7 +64,8 @@ public class MessageController {
 			return new ResponseEntity<>(apiRes, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			ApiResponse apiDelete = new ApiResponse(e.getMessage(), false);
+			return new ResponseEntity<>(apiDelete, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	

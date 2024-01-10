@@ -10,7 +10,6 @@ import com.panel.entity.Message;
 
 public interface MessageRepository extends JpaRepository<Message, Integer>{
 
-	@Query("select m from Message m join m.chat c where c.id=:chatId")
-	List<Message> findByChatId(@Param("chatId") Integer chatId);
+	 List<Message> findByChat_Id(Integer chatId);
 
 }

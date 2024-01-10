@@ -7,6 +7,7 @@ import com.panel.entity.Message;
 public class ChatMessagesResponse {
     private List<Message> messages;
     private String chatId;
+    
 	public ChatMessagesResponse() {
 		super();
 		// TODO Auto-generated constructor stub

@@ -69,18 +69,34 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<AuthResponse> userLogin(@RequestBody LoginRequest req) {
-		String email = req.getEmail();
-		String password = req.getPassword();
-		Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+	public ResponseEntity<AuthResponse> userLogin(@RequestBody LoginRequest req) throws UserException {
+	    String email = req.getEmail();
+	    String password = req.getPassword();
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+	    // Retrieve the user from the repository based on the provided email
+	    User isUser = userRepo.findByEmail(email);
 
-		String generatToken = jwtToken.generateToken(authentication);
-		AuthResponse authRes = new AuthResponse(generatToken, true);
+	    // Check if the user exists and if the provided password matches the stored encoded password
+	    if (isUser == null && !passwordEncoder.matches(password, isUser.getPassword())) {
+	        throw new UserException("Invalid user credentials");
+	    }
 
-		return new ResponseEntity<AuthResponse>(authRes, HttpStatus.CREATED);
+	    // Create an authentication token
+	    Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+
+	    // Set the authentication in the SecurityContextHolder
+	    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+	    // Generate a JWT token
+	    String generatedToken = jwtToken.generateToken(authentication);
+
+	    // Create an AuthResponse
+	    AuthResponse authRes = new AuthResponse(generatedToken, true);
+
+	    // Return the AuthResponse in the response entity
+	    return new ResponseEntity<>(authRes, HttpStatus.CREATED);
 	}
+
 
 	public Authentication authanticated(String email, String password) {
 		UserDetails userDetails = customuser.loadUserByUsername(password);

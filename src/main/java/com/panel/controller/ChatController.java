@@ -1,15 +1,12 @@
 package com.panel.controller;
 
-import com.panel.entity.Message;
 import com.panel.entity.MyChat;
 import com.panel.entity.User;
 import com.panel.exceptionHandler.UserException;
 import com.panel.payload.ApiResponse;
 import com.panel.request.GroupChatRequest;
 import com.panel.request.SingleChatRequest;
-import com.panel.service.ChatService;
 import com.panel.service.ChatServiceImpl;
-import com.panel.service.MessageService;
 import com.panel.service.UserServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,8 +123,6 @@ public class ChatController {
 			MyChat myChat = chatService.removeFromGroup(myChat1.getId(), userId, user);
 			return new ResponseEntity<MyChat>(myChat, HttpStatus.CREATED);
 		} catch (Exception e) {
-			// Handle exceptions appropriately, you might want to return a different
-			// HttpStatus
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

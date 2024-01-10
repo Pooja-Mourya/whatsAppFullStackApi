@@ -1,7 +1,9 @@
 package com.panel.service;
 
+import com.panel.entity.Message;
 import com.panel.entity.MyChat;
 import com.panel.entity.User;
+import com.panel.exceptionHandler.MessageException;
 import com.panel.exceptionHandler.ResourceNotFoundException;
 import com.panel.exceptionHandler.UserException;
 import com.panel.repository.ChatRepository;
@@ -26,19 +28,28 @@ public class ChatServiceImpl implements ChatService {
 	@Autowired
 	private UserServiceImpl userService;
 
+	@Autowired
+	private MessageService messageService;
+	
 	@Override
-	public MyChat userChat(User requser, Integer userId2) {
+	public MyChat userChat(User requser, Integer userId2) throws MessageException, UserException {
 		User user = userRepo.findUserById(userId2);
+		
 		System.out.println("api chat user : ** " + user);
 		MyChat chatIsExisting = chatRepo.findFirstByIsgroupFalseAndUsersContainsAndUsersContains(user, requser);
 		if (chatIsExisting != null) {
 			return chatIsExisting;
 		}
+		
+		Message messages = messageService.findMessageById(2);
+		System.out.println("my sms : " + messages);
 		MyChat chat = new MyChat();
 		chat.setCreated_by(requser);
 		chat.getUsers().add(requser);
 		chat.setName(requser.getUsername());
 		chat.setIsgroup(false);
+		chat.getMessages().add(messages);
+		chat.setChat_image(requser.getProfilePicture());
 		MyChat save = chatRepo.save(chat);
 		return save;
 	}
@@ -50,7 +61,9 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public List<MyChat> chatFindByUserId(Integer userId) {
-		return chatRepo.findByUsers_Id(userId);
+	 List<MyChat> byUsers_Id = chatRepo.findByUsers_Id(userId);
+	 System.out.println("byUser_id : " + byUsers_Id);
+	 return byUsers_Id;
 	}
 
 	@Override
@@ -74,7 +87,6 @@ public class ChatServiceImpl implements ChatService {
 			} catch (UserException e) {
 				e.printStackTrace();
 			}
-
 		}
 		return chatRepo.save(group);
 	}
@@ -138,6 +150,12 @@ public class ChatServiceImpl implements ChatService {
 			e.printStackTrace();
 		}
 		throw new ResourceNotFoundException("chat user not found");
+	}
+
+	@Override
+	public MyChat findChatById(int chatId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
